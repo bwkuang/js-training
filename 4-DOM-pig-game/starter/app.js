@@ -8,3 +8,55 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
+
+var roundScore = 0
+var activePlayer = 1;
+
+//Reset the display
+document.querySelector('.dice').style.display = 'none';
+document.getElementById('score-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('current-1').textContent = '0';
+
+document
+     .querySelector('.btn-roll')
+     .addEventListener('click', rollDiceAndUpdateRoundScores);
+
+
+function switchPlayerIfRequired(dice) {
+    if(dice === 1){
+        activePlayer = Math.abs(activePlayer-1);
+    }
+}
+
+function updateRoundScore(dice){
+    if(dice !== 1) {
+        roundScore += dice;       
+    }else{
+        roundScore = 0;
+    } 
+}
+
+function updateRoundScoreDisplay() {
+    var passivePlayer = Math.abs(activePlayer-1);
+    
+    document.querySelector('#current-' + activePlayer).textContent = roundScore;
+    document.querySelector('#current-' + passivePlayer).textContent = 0;
+}
+
+function updateDiceImage(dice) {
+    var diceElement = document.querySelector('.dice');
+    diceElement.style.display = 'initial';
+    diceElement.src = 'dice-' + dice + '.png';
+    // document.querySelector('.dice').src = 'dice-' + dice + '.png';
+}
+
+function rollDiceAndUpdateRoundScores() {
+    var dice = Math.floor(Math.random() * 6) + 1;
+    updateDiceImage(dice);
+    updateRoundScore(dice);
+    updateRoundScoreDisplay();
+    switchPlayerIfRequired(dice);
+}     
+
