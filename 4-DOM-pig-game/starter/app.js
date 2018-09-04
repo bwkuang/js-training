@@ -10,7 +10,7 @@ GAME RULES:
 */
 
 var roundScore = 0
-var activePlayer = 1;
+var activePlayer = 0;
 
 //Reset the display
 document.querySelector('.dice').style.display = 'none';
@@ -24,9 +24,14 @@ document
      .addEventListener('click', rollDiceAndUpdateRoundScores);
 
 
+
+function getPassivePlayer(){
+    return activePlayer === 0 ? 1 : 0;
+}     
+
 function switchPlayerIfRequired(dice) {
     if(dice === 1){
-        activePlayer = Math.abs(activePlayer-1);
+        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
     }
 }
 
@@ -39,10 +44,15 @@ function updateRoundScore(dice){
 }
 
 function updateRoundScoreDisplay() {
-    var passivePlayer = Math.abs(activePlayer-1);
-    
+    var passivePlayer = getPassivePlayer();
     document.querySelector('#current-' + activePlayer).textContent = roundScore;
     document.querySelector('#current-' + passivePlayer).textContent = 0;
+}
+
+function updateActivePlayerDisplay(){
+    var passivePlayer = getPassivePlayer();
+    document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
+    document.querySelector('.player-' + passivePlayer + '-panel').classList.remove('active');
 }
 
 function updateDiceImage(dice) {
@@ -58,5 +68,6 @@ function rollDiceAndUpdateRoundScores() {
     updateRoundScore(dice);
     updateRoundScoreDisplay();
     switchPlayerIfRequired(dice);
+    updateActivePlayerDisplay();
 }     
 
