@@ -10,6 +10,7 @@ GAME RULES:
 */
 
 var roundScore = 0
+var globalScore = [0,0];
 var activePlayer = 0;
 
 //Reset the display
@@ -23,7 +24,7 @@ document
      .querySelector('.btn-roll')
      .addEventListener('click', rollDiceAndUpdateRoundScores);
 
-
+document.querySelector('.btn-hold').addEventListener('click', holdPoints);
 
 function getPassivePlayer(){
     return activePlayer === 0 ? 1 : 0;
@@ -31,8 +32,12 @@ function getPassivePlayer(){
 
 function switchPlayerIfRequired(dice) {
     if(dice === 1){
-        activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+        switchPlayer();
     }
+}
+
+function switchPlayer(){
+    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
 }
 
 function updateRoundScore(dice){
@@ -49,7 +54,8 @@ function updateRoundScoreDisplay() {
     document.querySelector('#current-' + passivePlayer).textContent = 0;
 }
 
-function updateActivePlayerDisplay(){
+function updateDisplay(){
+    // updateRoundScoreDisplay();
     var passivePlayer = getPassivePlayer();
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
     document.querySelector('.player-' + passivePlayer + '-panel').classList.remove('active');
@@ -59,7 +65,6 @@ function updateDiceImage(dice) {
     var diceElement = document.querySelector('.dice');
     diceElement.style.display = 'initial';
     diceElement.src = 'dice-' + dice + '.png';
-    // document.querySelector('.dice').src = 'dice-' + dice + '.png';
 }
 
 function rollDiceAndUpdateRoundScores() {
@@ -68,6 +73,16 @@ function rollDiceAndUpdateRoundScores() {
     updateRoundScore(dice);
     updateRoundScoreDisplay();
     switchPlayerIfRequired(dice);
+    
     updateActivePlayerDisplay();
 }     
+
+function holdPoints(){
+    
+    globalScore[activePlayer] += roundScore;
+
+    document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
+    switchPlayer();  
+    updateActivePlayerDisplay();  
+}
 
