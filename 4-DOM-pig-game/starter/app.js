@@ -32,12 +32,21 @@ function getPassivePlayer(){
 
 function switchPlayerIfRequired(dice) {
     if(dice === 1){
+        resetRoundScore();
         switchPlayer();
     }
 }
 
 function switchPlayer(){
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
+    document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
+    document.querySelector('.player-' + getPassivePlayer() + '-panel').classList.remove('active');
+}
+
+function resetRoundScore(){
+    roundScore = 0;
+    document.querySelector('#current-0').textContent = roundScore;
+    document.querySelector('#current-1').textContent = roundScore;
 }
 
 function updateRoundScore(dice){
@@ -45,21 +54,17 @@ function updateRoundScore(dice){
         roundScore += dice;       
     }else{
         roundScore = 0;
-    } 
-}
+    }
 
-function updateRoundScoreDisplay() {
-    var passivePlayer = getPassivePlayer();
     document.querySelector('#current-' + activePlayer).textContent = roundScore;
-    document.querySelector('#current-' + passivePlayer).textContent = 0;
+    document.querySelector('#current-' + getPassivePlayer()).textContent = 0;
 }
 
-function updateDisplay(){
-    // updateRoundScoreDisplay();
-    var passivePlayer = getPassivePlayer();
-    document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
-    document.querySelector('.player-' + passivePlayer + '-panel').classList.remove('active');
+function updateGlobalScore(){
+    globalScore[activePlayer] += roundScore;
+    document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
 }
+
 
 function updateDiceImage(dice) {
     var diceElement = document.querySelector('.dice');
@@ -71,18 +76,12 @@ function rollDiceAndUpdateRoundScores() {
     var dice = Math.floor(Math.random() * 6) + 1;
     updateDiceImage(dice);
     updateRoundScore(dice);
-    updateRoundScoreDisplay();
     switchPlayerIfRequired(dice);
-    
-    updateActivePlayerDisplay();
 }     
 
 function holdPoints(){
-    
-    globalScore[activePlayer] += roundScore;
-
-    document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
+    updateGlobalScore();
+    resetRoundScore();
     switchPlayer();  
-    updateActivePlayerDisplay();  
 }
 
