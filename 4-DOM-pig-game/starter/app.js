@@ -24,7 +24,20 @@ document
      .querySelector('.btn-roll')
      .addEventListener('click', rollDiceAndUpdateRoundScores);
 
-document.querySelector('.btn-hold').addEventListener('click', holdPoints);
+document
+    .querySelector('.btn-hold')
+    .addEventListener('click', holdPoints);
+
+document
+    .querySelector('.btn-new')
+    .addEventListener('click', resetTheGame); 
+
+function resetTheGame(){
+    resetRoundScore();
+    resetGlobalScore();   
+    document.querySelector('.btn-roll').style.display = 'initial';
+    document.querySelector('.btn-hold').style.display = 'initial';
+}    
 
 function getPassivePlayer(){
     return activePlayer === 0 ? 1 : 0;
@@ -65,6 +78,11 @@ function updateGlobalScore(){
     document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
 }
 
+function resetGlobalScore(){
+    globalScore = [0,0];
+    document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
+    document.getElementById('score-'+ getPassivePlayer()).textContent = globalScore[getPassivePlayer()];
+};  
 
 function updateDiceImage(dice) {
     var diceElement = document.querySelector('.dice');
