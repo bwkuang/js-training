@@ -13,12 +13,7 @@ var roundScore = 0
 var globalScore = [0,0];
 var activePlayer = 0;
 
-//Reset the display
-document.querySelector('.dice').style.display = 'none';
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
+resetTheGame();
 
 document
      .querySelector('.btn-roll')
@@ -33,10 +28,13 @@ document
     .addEventListener('click', resetTheGame); 
 
 function resetTheGame(){
+    document.querySelector('.dice').style.display = 'none';
     resetRoundScore();
     resetGlobalScore();   
     document.querySelector('.btn-roll').style.display = 'initial';
     document.querySelector('.btn-hold').style.display = 'initial';
+    document.getElementById('name-0').textContent = 'Player 1';
+    document.getElementById('name-1').textContent = 'Player 2';
 }    
 
 function getPassivePlayer(){
@@ -97,7 +95,7 @@ function finishGame() {
 }
 
 function hasActivePlayerWon() {
-    return globalScore[activePlayer] >= 100;
+    return globalScore[activePlayer] >= 20;
 }
 
 function rollDiceAndUpdateRoundScores() {
