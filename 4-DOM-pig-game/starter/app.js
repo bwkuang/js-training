@@ -72,6 +72,16 @@ function updateDiceImage(dice) {
     diceElement.src = 'dice-' + dice + '.png';
 }
 
+function finishGame() {
+    document.getElementById('name-' + activePlayer).textContent = 'Player ' + (activePlayer+1) + ' wins!';
+    document.querySelector('.btn-roll').style.display = 'none';
+    document.querySelector('.btn-hold').style.display = 'none';
+}
+
+function hasActivePlayerWon() {
+    return globalScore[activePlayer] >= 100;
+}
+
 function rollDiceAndUpdateRoundScores() {
     var dice = Math.floor(Math.random() * 6) + 1;
     updateDiceImage(dice);
@@ -82,6 +92,11 @@ function rollDiceAndUpdateRoundScores() {
 function holdPoints(){
     updateGlobalScore();
     resetRoundScore();
-    switchPlayer();  
+
+    if(hasActivePlayerWon()){
+        finishGame();
+    } else{
+        switchPlayer();  
+    }
 }
 
