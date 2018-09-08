@@ -12,6 +12,7 @@ GAME RULES:
 var roundScore = 0
 var globalScore = [0,0];
 var activePlayer = 0;
+var previousDice = 0;
 
 resetTheGame();
 
@@ -30,7 +31,7 @@ document
 function resetTheGame(){
     hideDice();
     resetRoundScore();
-    resetGlobalScore();   
+    resetAllGlobalScores();   
     showRollAndHoldButtons();
     setPlayersName();
 }    
@@ -60,6 +61,19 @@ function switchPlayerIfRequired(dice) {
     }
 }
 
+function switchPlayerAndResetGlobalScoreIfAnotherSix(dice){
+    if(shouldResetGlobalScoreOfActivePlayer(dice)){
+        resetGlobalScoreOfActivePlayer();
+        resetRoundScore();
+        switchPlayer();
+    }
+}
+
+function shouldResetGlobalScoreOfActivePlayer(dice){
+    return dice === 6 && previousDice === 6;
+}
+
+
 function switchPlayer(){
     activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
     document.querySelector('.player-' + activePlayer + '-panel').classList.add('active');
@@ -88,11 +102,16 @@ function updateGlobalScore(){
     document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
 }
 
-function resetGlobalScore(){
+function resetAllGlobalScores(){
     globalScore = [0,0];
     document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
     document.getElementById('score-'+ getPassivePlayer()).textContent = globalScore[getPassivePlayer()];
 };  
+
+function resetGlobalScoreOfActivePlayer(){
+    globalScore[activePlayer] = 0;
+    document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
+}
 
 function updateDiceImage(dice) {
     var diceElement = document.querySelector('.dice');
@@ -115,6 +134,8 @@ function rollDiceAndUpdateRoundScores() {
     updateDiceImage(dice);
     updateRoundScore(dice);
     switchPlayerIfRequired(dice);
+    switchPlayerAndResetGlobalScoreIfAnotherSix(dice);
+    previousDice = dice;
 }     
 
 function holdPoints(){
