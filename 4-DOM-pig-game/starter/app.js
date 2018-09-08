@@ -13,6 +13,7 @@ var roundScore = 0
 var globalScore = [0,0];
 var activePlayer = 0;
 var previousDice = 0;
+var winningScore = 20;
 
 resetTheGame();
 
@@ -29,12 +30,25 @@ document
     .addEventListener('click', resetTheGame); 
 
 function resetTheGame(){
+    captureWinningScore();
     hideDice();
+    hideRollAndHoldButtons();
     resetRoundScore();
     resetAllGlobalScores();   
-    showRollAndHoldButtons();
     setPlayersName();
-}    
+
+    if(isWinningScoreValid()){
+        showRollAndHoldButtons();
+    }
+} 
+
+function captureWinningScore(){
+    winningScore = document.getElementById('winning-score').value;
+}
+
+function isWinningScoreValid(){
+    return winningScore >= 1;
+}
 
 function hideDice(){
     document.querySelector('.dice').style.display = 'none';
@@ -61,7 +75,7 @@ function switchPlayerIfRequired(dice) {
     }
 }
 
-function switchPlayerAndResetGlobalScoreIfAnotherSix(dice){
+function switchPlayerAndResetGlobalScoreIfConditionsMet(dice){
     if(shouldResetGlobalScoreOfActivePlayer(dice)){
         resetGlobalScoreOfActivePlayer();
         resetRoundScore();
@@ -119,14 +133,18 @@ function updateDiceImage(dice) {
     diceElement.src = 'dice-' + dice + '.png';
 }
 
-function finishGame() {
-    document.getElementById('name-' + activePlayer).textContent = 'Player ' + (activePlayer+1) + ' wins!';
+function hideRollAndHoldButtons(){
     document.querySelector('.btn-roll').style.display = 'none';
     document.querySelector('.btn-hold').style.display = 'none';
 }
 
+function finishGame() {
+    document.getElementById('name-' + activePlayer).textContent = 'Player ' + (activePlayer+1) + ' wins!';
+    hideRollAndHoldButtons();
+}
+
 function hasActivePlayerWon() {
-    return globalScore[activePlayer] >= 20;
+    return globalScore[activePlayer] >= winningScore;
 }
 
 function rollDiceAndUpdateRoundScores() {
@@ -134,7 +152,7 @@ function rollDiceAndUpdateRoundScores() {
     updateDiceImage(dice);
     updateRoundScore(dice);
     switchPlayerIfRequired(dice);
-    switchPlayerAndResetGlobalScoreIfAnotherSix(dice);
+    switchPlayerAndResetGlobalScoreIfConditionsMet(dice);
     previousDice = dice;
 }     
 
