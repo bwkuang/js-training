@@ -28,14 +28,26 @@ document
     .addEventListener('click', resetTheGame); 
 
 function resetTheGame(){
-    document.querySelector('.dice').style.display = 'none';
+    hideDice();
     resetRoundScore();
     resetGlobalScore();   
+    showRollAndHoldButtons();
+    setPlayersName();
+}    
+
+function hideDice(){
+    document.querySelector('.dice').style.display = 'none';
+}
+
+function showRollAndHoldButtons(){
     document.querySelector('.btn-roll').style.display = 'initial';
     document.querySelector('.btn-hold').style.display = 'initial';
+}
+
+function setPlayersName(){
     document.getElementById('name-0').textContent = 'Player 1';
     document.getElementById('name-1').textContent = 'Player 2';
-}    
+}
 
 function getPassivePlayer(){
     return activePlayer === 0 ? 1 : 0;
