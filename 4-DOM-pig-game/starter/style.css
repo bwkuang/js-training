@@ -143,10 +143,20 @@ i {
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
 
-.dice {
+.dice-1 {
     position: absolute;
     left: 50%;
-    top: 178px;
+    top: 100px;
+    transform: translateX(-50%);
+    height: 100px;
+    box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+
+.dice-2 {
+    position: absolute;
+    left: 50%;
+    top: 225px;
     transform: translateX(-50%);
     height: 100px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
@@ -164,7 +174,7 @@ i {
     background: none;
     border: solid;
     font-family: Lato;
-    font-size: 20px;
+    font-size: 15px;
     text-transform: uppercase;
     cursor: pointer;
     font-weight: 300;

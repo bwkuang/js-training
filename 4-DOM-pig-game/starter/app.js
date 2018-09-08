@@ -12,8 +12,8 @@ GAME RULES:
 var roundScore = 0
 var globalScore = [0,0];
 var activePlayer = 0;
-var previousDice = 0;
-var winningScore = 20;
+var previousDice1 = 0;
+var previousDice2 = 0;
 
 resetTheGame();
 
@@ -31,7 +31,7 @@ document
 
 function resetTheGame(){
     captureWinningScore();
-    hideDice();
+    hideDices();
     hideRollAndHoldButtons();
     resetRoundScore();
     resetAllGlobalScores();   
@@ -50,8 +50,9 @@ function isWinningScoreValid(){
     return winningScore >= 1;
 }
 
-function hideDice(){
-    document.querySelector('.dice').style.display = 'none';
+function hideDices(){
+    document.getElementById('dice1').style.display = 'none';
+    document.getElementById('dice2').style.display = 'none';
 }
 
 function showRollAndHoldButtons(){
@@ -68,23 +69,23 @@ function getPassivePlayer(){
     return activePlayer === 0 ? 1 : 0;
 }     
 
-function switchPlayerIfRequired(dice) {
-    if(dice === 1){
+function switchPlayerIfRequired(dice1, dice2) {
+    if(dice1 === 1 || dice2 === 1){
         resetRoundScore();
         switchPlayer();
     }
 }
 
-function switchPlayerAndResetGlobalScoreIfConditionsMet(dice){
-    if(shouldResetGlobalScoreOfActivePlayer(dice)){
+function switchPlayerAndResetGlobalScoreIfConditionsMet(dice1, dice2){
+    if(shouldResetGlobalScoreOfActivePlayer(dice1, dice2)){
         resetGlobalScoreOfActivePlayer();
         resetRoundScore();
         switchPlayer();
     }
 }
 
-function shouldResetGlobalScoreOfActivePlayer(dice){
-    return dice === 6 && previousDice === 6;
+function shouldResetGlobalScoreOfActivePlayer(dice1, dice2){
+    return (dice1 === 6 || dice2 === 6) && (previousDice1 === 6 || previousDice2 ===6);
 }
 
 
@@ -100,9 +101,9 @@ function resetRoundScore(){
     document.querySelector('#current-1').textContent = roundScore;
 }
 
-function updateRoundScore(dice){
-    if(dice !== 1) {
-        roundScore += dice;       
+function updateRoundScore(dice1, dice2){
+    if(dice1 !== 1 || dice2 !==1) {
+        roundScore += (dice1 + dice2);       
     }else{
         roundScore = 0;
     }
@@ -127,10 +128,14 @@ function resetGlobalScoreOfActivePlayer(){
     document.getElementById('score-'+ activePlayer).textContent = globalScore[activePlayer];
 }
 
-function updateDiceImage(dice) {
-    var diceElement = document.querySelector('.dice');
-    diceElement.style.display = 'initial';
-    diceElement.src = 'dice-' + dice + '.png';
+function updateDiceImage(dice1, dice2) {
+    var diceElement1 = document.getElementById("dice1");
+    diceElement1.style.display = 'initial';
+    diceElement1.src = 'dice-' + dice1 + '.png';
+
+    var diceElement2 = document.getElementById("dice2");
+    diceElement2.style.display = 'initial';
+    diceElement2.src = 'dice-' + dice2 + '.png';
 }
 
 function hideRollAndHoldButtons(){
@@ -148,12 +153,14 @@ function hasActivePlayerWon() {
 }
 
 function rollDiceAndUpdateRoundScores() {
-    var dice = Math.floor(Math.random() * 6) + 1;
-    updateDiceImage(dice);
-    updateRoundScore(dice);
-    switchPlayerIfRequired(dice);
-    switchPlayerAndResetGlobalScoreIfConditionsMet(dice);
-    previousDice = dice;
+    var dice1 = Math.floor(Math.random() * 6) + 1;
+    var dice2 = Math.floor(Math.random() * 6) + 1;
+    updateDiceImage(dice1, dice2);
+    updateRoundScore(dice1, dice2);
+    switchPlayerIfRequired(dice1, dice2);
+    switchPlayerAndResetGlobalScoreIfConditionsMet(dice1, dice2);
+    previousDice1 = dice1;
+    previousDice2 = dice2;
 }     
 
 function holdPoints(){
